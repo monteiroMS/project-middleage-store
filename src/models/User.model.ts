@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { InvalidFields } from '../errors';
+import { InternalServerError, InvalidFields } from '../errors';
 import { IError, ILoginRequest, IUser, IUserCreateRequest } from '../interfaces';
 import connection from './connection';
 
@@ -50,5 +50,17 @@ export const create = async (
   } catch (error) {
     console.log(error);
     return InvalidFields;
+  }
+};
+
+export const getAll = async () => {
+  try {
+    const [users] = await connection.execute(`
+      SELECT * FROM Trybesmith.Users;
+    `);
+    return users;
+  } catch (error) {
+    console.log(error);
+    return InternalServerError;
   }
 };

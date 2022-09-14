@@ -15,4 +15,7 @@ export const create = async (user: IUserCreateRequest) => {
   }
 };
 
-export default create;
+export const getAll = async () => {
+  const users = await UserModel.getAll();
+  return users;
+};

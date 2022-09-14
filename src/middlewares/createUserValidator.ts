@@ -2,10 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 import Joi from 'joi';
 
 const schema = Joi.object({
-  username: Joi.string().required(),
-  classe: Joi.string().required(),
-  level: Joi.number().required(),
-  password: Joi.string().required(),
+  username: Joi.string().min(3).required(),
+  classe: Joi.string().min(3).required(),
+  level: Joi.number().min(1).required(),
+  password: Joi.string().min(8).required(),
 });
 
 const createUserValidator = (req: Request, res: Response, next: NextFunction) => {
@@ -13,7 +13,9 @@ const createUserValidator = (req: Request, res: Response, next: NextFunction) =>
 
   if (validations.error) {
     const [{ message }] = validations.error.details;
-    return res.status(400).json({ message });
+    return message.includes('is required')
+      ? res.status(400).json({ message })
+      : res.status(422).json({ message });
   }
 
   next();
