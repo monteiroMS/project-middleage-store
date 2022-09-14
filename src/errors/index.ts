@@ -1,5 +1,5 @@
-import { IInternalError } from '../interfaces';
+import { IError } from '../interfaces';
 
-export const InternalServerError: IInternalError = { code: 500, message: 'Internal Server Error' };
+export const InternalServerError: IError = { code: 500, message: 'Internal Server Error' };
 
-export default InternalServerError;
+export const InvalidFields: IError = { code: 400, message: 'Invalid Fields' };

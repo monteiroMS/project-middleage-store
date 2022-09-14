@@ -1,8 +1,8 @@
 import { InternalServerError } from '../errors';
-import { IInternalError, IProduct, IProductRequest } from '../interfaces';
+import { IError, IProduct, IProductRequest } from '../interfaces';
 import * as ProductModel from '../models/Product.model';
 
-export const getAll = async (): Promise<IProduct[] | IInternalError> => {
+export const getAll = async (): Promise<IProduct[] | IError> => {
   try {
     const products = await ProductModel.getAll();
 
@@ -14,7 +14,7 @@ export const getAll = async (): Promise<IProduct[] | IInternalError> => {
   }
 };
 
-export const getById = async (id: string): Promise<IProduct[] | IInternalError> => {
+export const getById = async (id: string): Promise<IProduct[] | IError> => {
   try {
     const product = await ProductModel.getById(id);
 

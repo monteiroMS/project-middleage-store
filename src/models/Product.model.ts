@@ -1,11 +1,11 @@
 import { ResultSetHeader } from 'mysql2';
 import { InternalServerError } from '../errors';
-import { IInternalError, IProduct, IProductRequest } from '../interfaces';
+import { IError, IProduct, IProductRequest } from '../interfaces';
 import connection from './connection';
 
-const getId = (item: ResultSetHeader): number => item.insertId;
+export const getId = (item: ResultSetHeader): number => item.insertId;
 
-export const getAll = async (): Promise<IProduct[] | IInternalError> => {
+export const getAll = async (): Promise<IProduct[] | IError> => {
   try {
     const [result] = await connection.execute(`
       SELECT * FROM Trybesmith.Products;
@@ -20,7 +20,7 @@ export const getAll = async (): Promise<IProduct[] | IInternalError> => {
   }
 };
 
-export const getById = async (id: string): Promise<IProduct[] | IInternalError> => {
+export const getById = async (id: string): Promise<IProduct[] | IError> => {
   try {
     const [result] = await connection.execute(`
       SELECT * FROM Trybesmith.Products
@@ -37,7 +37,7 @@ export const getById = async (id: string): Promise<IProduct[] | IInternalError> 
 
 export const create = async (
   { name, amount }: IProductRequest,
-): Promise<number | IInternalError> => {
+): Promise<number | IError> => {
   try {
     const [result] = await connection.execute(`
       INSERT INTO Trybesmith.Products (name, amount)
