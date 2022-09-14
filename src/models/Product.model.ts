@@ -1,6 +1,9 @@
+import { ResultSetHeader } from 'mysql2';
 import { InternalServerError } from '../errors';
-import { IInternalError, IProduct } from '../interfaces';
+import { IInternalError, IProduct, IProductRequest } from '../interfaces';
 import connection from './connection';
+
+const getId = (item: ResultSetHeader): number => item.insertId;
 
 export const getAll = async (): Promise<IProduct[] | IInternalError> => {
   try {
@@ -27,6 +30,23 @@ export const getById = async (id: string): Promise<IProduct[] | IInternalError> 
     if (!result) throw new Error();
 
     return result as IProduct[];
+  } catch (error: unknown) {
+    return InternalServerError;
+  }
+};
+
+export const create = async (
+  { name, amount }: IProductRequest,
+): Promise<number | IInternalError> => {
+  try {
+    const [result] = await connection.execute(`
+      INSERT INTO Trybesmith.Products (name, amount)
+      VALUES (?, ?);
+    `, [name, amount]);
+
+    if (!result) throw new Error();
+    
+    return getId(result as ResultSetHeader);
   } catch (error: unknown) {
     return InternalServerError;
   }

@@ -9,3 +9,8 @@ export interface IProduct {
   amount: string,
   orderId?: number,
 }
+
+export interface IProductRequest {
+  name: string,
+  amount: string,
+}
