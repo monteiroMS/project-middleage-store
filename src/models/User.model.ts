@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { InternalServerError, InvalidFields } from '../errors';
-import { IError, ILoginRequest, IUser, IUserCreateRequest } from '../interfaces';
+import { ILoginRequest, IUser, IUserCreateRequest } from '../interfaces';
 import connection from './connection';
 
 const JWT_SECRET = process.env.JWT_SECRET ? process.env.JWT_SECRET : 'password';
@@ -35,7 +35,7 @@ export const login = async (loginReq: ILoginRequest) => {
 
 export const create = async (
   { username, password, classe, level }: IUserCreateRequest,
-): Promise<string | IError> => {
+): Promise<string | Error> => {
   try {
     const [user] = await connection.execute(`
       INSERT INTO Trybesmith.Users (username, password, classe, level)

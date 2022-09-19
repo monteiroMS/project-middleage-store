@@ -1,5 +1,5 @@
 import { InvalidFields } from '../errors';
-import { IUserCreateRequest } from '../interfaces';
+import { ILoginRequest, IUserCreateRequest } from '../interfaces';
 import * as UserModel from '../models/User.model';
 
 export const create = async (user: IUserCreateRequest) => {
@@ -18,4 +18,9 @@ export const create = async (user: IUserCreateRequest) => {
 export const getAll = async () => {
   const users = await UserModel.getAll();
   return users;
+};
+
+export const login = async (loginReq: ILoginRequest) => {
+  const token = await UserModel.login(loginReq);
+  return token;
 };
