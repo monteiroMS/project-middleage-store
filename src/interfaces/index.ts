@@ -46,3 +46,20 @@ export interface IOrderBeforeSerialize {
   userId: number,
   productsIds: number,
 }
+
+export interface IJWTResult {
+  id: number,
+  username: string,
+  iat: number,
+  exp: number,
+}
+
+export interface IResultCreateOrder {
+  userId: number,
+  productsIds: number[],
+}
+
+export interface ICreateOrderRequest {
+  userId: number,
+  productsIds: number[],
+}

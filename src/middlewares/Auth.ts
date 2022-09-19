@@ -1,20 +1,35 @@
 import { NextFunction, Request, Response } from 'express';
-import Joi from 'joi';
+import jwt from 'jsonwebtoken';
+import { IJWTResult } from '../interfaces';
 
-const schema = Joi.object({
-  username: Joi.string().min(3).required(),
-  password: Joi.string().min(8).required(),
-});
+const JWT_SECRET = process.env.JWT_SECRET ? process.env.JWT_SECRET : 'password';
+const NOT_FOUND_MESSAGE = 'Token not found';
+const INVALID_TOKEN_MESSAGE = 'Invalid token';
 
-const loginValidator = (req: Request, res: Response, next: NextFunction) => {
-  const validations = schema.validate(req.body);
+interface AuthRequest extends Request {
+  userId?: number,
+}
 
-  if (validations.error) {
-    const [{ message }] = validations.error.details;
-    return res.status(400).json({ message });
+const authenticator = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { authorization } = req.headers;
+
+    if (!authorization) {
+      return res.status(401).json({ message: NOT_FOUND_MESSAGE });
+    }
+
+    const result = jwt.verify(authorization, JWT_SECRET);
+
+    const { id } = result as IJWTResult;
+    
+    req.userId = id;
+
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      message: INVALID_TOKEN_MESSAGE,
+    });
   }
-
-  next();
 };
 
-export default loginValidator;
+export default authenticator;

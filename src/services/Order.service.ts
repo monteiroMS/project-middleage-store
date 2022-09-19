@@ -1,5 +1,5 @@
 import * as OrderModel from '../models/Order.model';
-import { IOrder, IOrderBeforeSerialize } from '../interfaces';
+import { ICreateOrderRequest, IOrder, IOrderBeforeSerialize } from '../interfaces';
 
 const makeItIOrder = ({ id, userId, productsIds }: IOrderBeforeSerialize): IOrder => ({
   id,
@@ -27,6 +27,11 @@ export const getAll = async () => {
   const orders = await OrderModel.getAll();
   const result = orders.map(makeItIOrder);
   return serialize(result);
+};
+
+export const create = async (createOrderReq: ICreateOrderRequest) => {
+  const result = await OrderModel.create(createOrderReq);
+  return result;
 };
 
 export default getAll;

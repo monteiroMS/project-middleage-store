@@ -35,19 +35,13 @@ export const getById = async (id: string): Promise<IProduct[] | IError> => {
   }
 };
 
-export const create = async (
-  { name, amount }: IProductRequest,
-): Promise<number | IError> => {
-  try {
-    const [result] = await connection.execute(`
-      INSERT INTO Trybesmith.Products (name, amount)
-      VALUES (?, ?);
-    `, [name, amount]);
+export const create = async ({ name, amount }: IProductRequest): Promise<number> => {
+  const [result] = await connection.execute(`
+    INSERT INTO Trybesmith.Products (name, amount)
+    VALUES (?, ?);
+  `, [name, amount]);
 
-    if (!result) throw new Error();
-    
-    return getId(result as ResultSetHeader);
-  } catch (error: unknown) {
-    return InternalServerError;
-  }
+  const { insertId } = result as ResultSetHeader;
+
+  return insertId;
 };
